@@ -1,0 +1,50 @@
+###############################################################################
+# Bazel now uses Bzlmod by default to manage external dependencies.
+# Please consider migrating your external dependencies from WORKSPACE to MODULE.bazel.
+#
+# For more details, please check https://github.com/bazelbuild/bazel/issues/18958
+###############################################################################
+module(name = "bazelapp", version = "1.0.0")
+
+bazel_dep(name = "rules_jvm_external", version = "6.6")
+bazel_dep(name = "contrib_rules_jvm", version = "0.27.0")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+
+JUNIT_JUPITER_VERSION = "5.11.4"
+JUNIT_PLATFORM_VERSION = "1.11.4"
+
+maven.install(
+    artifacts = [
+        "com.aayushatharva.brotli4j:native-windows-x86_64:1.18.0",
+        "jakarta.enterprise:jakarta.enterprise.cdi-api:4.1.0",
+        "jakarta.ws.rs:jakarta.ws.rs-api:4.0.0",
+        "jakarta.inject:jakarta.inject-api:2.0.1",
+        "io.quarkus:quarkus-rest:3.18.0",
+        "io.quarkus:quarkus-junit5:3.18.0",
+        "io.quarkus:quarkus-resteasy:3.18.0",
+        "io.rest-assured:rest-assured:5.5.0",
+        "org.junit.jupiter:junit-jupiter:%s" % JUNIT_JUPITER_VERSION,
+        "org.junit.platform:junit-platform-reporting:%s" % JUNIT_PLATFORM_VERSION,
+
+        #"io.quarkus:quarkus-resteasy-jackson:3.18.0",
+        #"io.quarkus:quarkus-smallrye-health:3.18.0",
+
+        "io.quarkus.platform:quarkus-bom:3.18.0.CR1",
+        "io.quarkus:quarkus-bom:3.18.0",
+        "io.quarkus:quarkus-core:3.18.0",
+        "io.quarkus:quarkus-bootstrap-core:3.18.0",
+    ],
+    excluded_artifacts = [
+        "org.eclipse.sisu:org.eclipse.sisu.plexus"
+    ],
+    #resolver = "coursier",
+    resolve_timeout = 1200,
+    fail_on_missing_checksum = False,
+    fetch_sources = False,
+    fetch_javadoc = False,
+    repositories = [
+        "https://repo1.maven.org/maven2",
+    ],
+)
+use_repo(maven, "maven")

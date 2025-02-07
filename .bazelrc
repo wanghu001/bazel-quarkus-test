@@ -1,0 +1,8 @@
+common --enable_bzlmod
+startup --server_javabase="C:/Program Files/jdk21.0.5_11"
+build --explain=explain.txt --verbose_explanations --verbose_failures --jvmopt="-Xmx16g" --nojava_header_compilation
+fetch --explain=explain.txt --verbose_explanations --verbose_failures --jvmopt="-Xmx16g"
+
+test --explain=explain.txt --verbose_explanations --verbose_failures --jvmopt="-Xmx16g" --nojava_header_compilation --subcommands --test_arg=--enable-preview --test_arg=-Dquarkus.log.level=DEBUG --test_output=all
+
+# --java_language_version=21 
